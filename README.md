@@ -1,2 +1,2 @@
-# SSwCV.py
+# SSwCV
 SSwCV - Scanning Script with Check Vulns
