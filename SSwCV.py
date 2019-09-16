@@ -14,6 +14,7 @@ My own script mainly for OSCP exam.
 
 import nmap
 from CVEs import *
+from CVEss import *
 from os import system
 from os import path
 from time import sleep
