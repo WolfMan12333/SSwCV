@@ -3,7 +3,8 @@ import sys
 import subprocess
 import nmap
 import socket
-
+from RC import *
+ 
 def CVE_DNS_53():
 	nms = nmap.PortScanner()
 	srv = input("Give a dns site[ns2.isc-sns.com]: ")
@@ -38,44 +39,24 @@ def CVE_DNS_53():
 	print("\t\t\tMore Info: "+nms[data]['udp'][53]['extrainfo'])
 
 	print("""
-	Vulnerabilities for ISC BIND 9
+	Known Vulnerability for ISC BIND 9 in this project:
 				CVE-2016-2776
-				CVE-2016-1284
-				CVE-2015-8461
-				CVE-2015-5986
-				CVE-2015-5722
-				CVE-2015-4620
-				CVE-2015-5477
-				CVE-2014-8500
-				CVE-2014-3859
-				CVE-2014-3214
-				CVE-2014-0591
-				CVE-2013-4854
-				CVE-2013-3919
-				CVE-2013-2266
-				CVE-2012-5689
-				CVE-2012-5688
-				CVE-2012-5166
-				CVE-2012-4244
-				CVE-2012-3868
-				CVE-2012-3817
-				CVE-2012-1667
-				CVE-2011-4313
-				CVE-2011-2465
-				CVE-2011-2464
-				CVE-2011-1910
-				CVE-2011-1907
 
 	Vulnerabilities for Microsoft DNS:
-				CVE-2016-3227
-				CVE-2015-6125
+				CVE-2016-3227 to samo CVE-2015-6125
 				CVE-2012-0006
-				CVE-2012-1194
 				CVE-2012-1194
 				CVE-2011-1970
 				CVE-2011-1966
 				CVE-2009-0234
 	""")
+
+	print("If you want try use exploits against the target, please enter yes:")
+	ans = input()
+
+	if ans == "yes":
+		ip = input("Please, enter an ip address of the target:")
+		run_scripts(ip, 53)
 
 def CVE_Web_Servers(ip):
 	#identyfikowanie obecności proxy lub równoważenia obciążeń

